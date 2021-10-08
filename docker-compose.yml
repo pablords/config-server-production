@@ -6,7 +6,9 @@ services:
     container_name: api-gateway
     env_file: ./.env
     volumes:
-    - ./nginx/nginx.conf/:/usr/share/nginx/nginx.conf:ro
+     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+     - ./nginx/ssl:/etc/nginx/ssl:ro
+     - ./nginx/www:/app/www:ro
     ports:
     - ${NGINX_PORT}:80
     environment:
