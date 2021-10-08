@@ -28,7 +28,7 @@ services:
       - ${PORTAINER_HTTP_PORT}:9000
     volumes: 
       - /var/run/docker.sock:/var/run/docker.sock
-      - ${PORTAINER_HOME}:/data portainer/ portainer/portainer-ce
+      - ${PORTAINER_HOME}/portainer:/data portainer/ portainer/portainer-ce
     networks:
       - server
 
