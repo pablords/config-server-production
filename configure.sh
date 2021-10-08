@@ -2,8 +2,7 @@
 
 
 mkdir jenkins
-
-
+mkdir portainer_data
 
 export PORTAINER_HOME=~/config-server-production/portainer_data
 export JEKINS_HOME=~/config-server-production/jenkins
