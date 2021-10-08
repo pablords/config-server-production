@@ -4,9 +4,9 @@
 mkdir jenkins
 
 
-export HTTP_HOME=~/devops-server/http
-export PORTAINER_HOME=~/devops-server/portainer_data
-export JEKINS_HOME=~/devops-server/jenkins
+export HTTP_HOME=~/config-server-production/http
+export PORTAINER_HOME=~/config-server-production/portainer_data
+export JEKINS_HOME=~/config-server-production/jenkins
 
 sudo setfacl -R -d -m o::rwx $JEKINS_HOME
 
