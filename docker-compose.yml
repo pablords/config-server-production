@@ -1,21 +1,6 @@
 version: '3.7'
 
 services:
-  api-gateway:
-    image: nginx
-    container_name: api-gateway
-    env_file: ./.env
-    volumes:
-     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-     - ./nginx/ssl:/etc/nginx/ssl:ro
-     - ./www:/app/www:ro
-    ports:
-    - ${NGINX_PORT}:80
-    environment:
-    - NGINX_HOST=${HOST}
-    - NGINX_PORT=80
-    networks:
-      - server
 
   portainer:
     env_file: ./.env
