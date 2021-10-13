@@ -1,6 +1,67 @@
 version: '3.7'
 
 services:
+  api-gateway:
+    image: nginxproxy/nginx-proxy
+    container_name: api-gateway
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./api-gateway/conf:/etc/nginx/conf.d
+      - ./api-gateway/certs:/etc/nginx/certs
+      - ./api-gateway/vhost:/etc/nginx/vhost.d
+      - ./api-gateway/www:/usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./api-gateway/dhparam:/etc/nginx/dhparam
+    network_mode: bridge
+  
+  nginx-proxy-acme:
+    image: nginxproxy/acme-companion
+    container_name: nginx-proxy-acme
+    volumes_from:
+      - api-gateway
+    volumes:
+      - ./letencripty/certs:/etc/nginx/certs:rw
+      - ./letencripty/var/run/docker.sock:/var/run/docker.sock:ro
+      - ./letencripty/acme:/etc/acme.sh
+    environment:
+      DEFAULT_EMAIL: pablords@gmail.com
+    network_mode: bridge
+
+    
+  app-nginx:
+    env_file: ./.env
+    image: 'jc21/nginx-proxy-manager:latest'
+    ports:
+      - ${APP_NGINX}:81
+    expose:
+      - "81"
+    environment:  
+      VIRTUAL_PORT: ${APP_NGINX}
+      LETSENCRYPT_HOST: app.double-check.tech
+      LETSENCRYPT_EMAIL: pablords@gmail.com
+      DB_MYSQL_HOST: ${DB_MYSQL_HOST}
+      DB_MYSQL_PORT: ${DB_MYSQL_PORT}
+      DB_MYSQL_USER: ${DB_MYSQL_USER}
+      DB_MYSQL_PASSWORD: ${DB_MYSQL_PASSWORD}
+      DB_MYSQL_NAME: ${DB_MYSQL_NAME}
+    volumes:
+      - ./nginx-dashboard/data:/data
+    network_mode: bridge
+
+  db-nginx:
+    image: 'jc21/mariadb-aria:latest'
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${DB_MYSQL_NAME}
+      MYSQL_USER: ${DB_MYSQL_USER}
+      MYSQL_PASSWORD: ${DB_MYSQL_PASSWORD}
+      MYSQL_PORT: ${DB_MYSQL_PORT}
+    volumes:
+      - ./nginx-dashboard/data/mysql:/var/lib/mysql
+    network_mode: bridge
+
 
   portainer:
     env_file: ./.env
@@ -14,11 +75,10 @@ services:
     volumes: 
       - /var/run/docker.sock:/var/run/docker.sock
       - ${PORTAINER_HOME}:/data portainer/ portainer/portainer-ce
-    networks:
-      - server
+    network_mode: bridge
 
   jenkins:
-    image: axltxl/jenkins-dood
+    image: jenkins/jenkins
     env_file: ./.env
     container_name: jenkins
     volumes:
@@ -26,8 +86,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - ${JENKINS_HTTP_PORT}:8080
-    networks:
-      - server
+      - "5000:5000"
+    expose:
+      - "8080"
+    network_mode: bridge
 
-networks:
-  server:

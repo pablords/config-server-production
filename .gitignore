@@ -5,3 +5,6 @@
 /portainer_data
 /jenkins
 /data
+/api-gateway/certs
+/api-gateway/dhparam
+/nginx-dashboard
