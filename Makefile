@@ -18,4 +18,4 @@ logs:
 
 .PHONY: configure
 configure:
-	./configure.sh
+	chmod +x configure.sh && ./configure.sh
