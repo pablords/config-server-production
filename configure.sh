@@ -1,10 +1,18 @@
 #!/bin/bash
 
 
-mkdir jenkins
-mkdir portainer_data
+if [ ! -d "jenkins" ]; then
+    echo "criando diretorio jenkins"
+    mkdir jenkins
+fi
 
-export CONFIG_PROD_HOME=~/config-server-production
+if [ ! -d "portainer_data" ]; then
+    echo "criando diretorio portainer_data"
+    mkdir portainer_data
+fi
+
+
+echo export CONFIG_PROD_HOME=~/config-server-production >> ~/.bashrc
 export PORTAINER_HOME=~/config-server-production/portainer_data
 export JEKINS_HOME=~/config-server-production/jenkins
 
