@@ -24,7 +24,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.traefik-secure.entrypoints=websecure"
-      - "traefik.http.routers.traefik-secure.rule=Host(`traefik.example.com`)"
+      - "traefik.http.routers.traefik-secure.rule=Host(`${TRAEFIK_URL}`)"
       - "traefik.http.routers.traefik-secure.middlewares=user-auth@file"
       - "traefik.http.routers.traefik-secure.service=api@internal"
 
@@ -45,7 +45,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.portainer-secure.entrypoints=websecure"
-      - "traefik.http.routers.portainer-secure.rule=Host(`portainer.double-check.tech`)"
+      - "traefik.http.routers.portainer-secure.rule=Host(`${PORTAINER_URL}`)"
       - "traefik.http.routers.portainer-secure.service=portainer"
       - "traefik.http.services.portainer.loadbalancer.server.port=${PORTAINER_PORT}"
   
@@ -64,7 +64,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.jenkins-secure.entrypoints=websecure"
-      - "traefik.http.routers.jenkins-secure.rule=Host(`jenkins.double-check.tech`)"
+      - "traefik.http.routers.jenkins-secure.rule=Host(`${JENKINS_URL}`)"
       - "traefik.http.routers.jenkins-secure.service=jenkins"
       - "traefik.http.services.jenkins.loadbalancer.server.port=${JENKINS_PORT}"
 
