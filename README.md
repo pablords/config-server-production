@@ -1,14 +1,20 @@
 # configurações basicas server producao
 
-- nginx 
+- traefik 
 - portainer
 - jenkins
 
-Email:    admin@example.com
-Password: changeme
-Após login, a primeira coisa que vai pedir é para você colocar seu nome NickName, e-mail e trocar a senha.
 # gerar certificados
 
 docker run -it -p 80:80 -v "/docker/volumes/certbot/etc/letsencrypt:/etc/letsencrypt" certbot/dns-digitalocean certonly --standalone
 
 gitlab.doublecheck-app.tech
+
+
+# Os seguintes comandos podem ser usados ​​para gerar uma chave SSL autoassinada e um certificado
+
+Para gerar a chave:
+
+openssl genrsa -out nginx.double-check.tech.key 2048 E o certificado (substitua nginx.double-check.tech pelo seu nome de domínio):
+
+openssl req -new -x509 -key nginx.double-check.tech.key -out nginx.double-check.tech.cert -days 3650 -subj /CN=sample-microservice1.test
