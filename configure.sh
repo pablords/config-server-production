@@ -1,5 +1,5 @@
 #!/bin/bash
-
+docker network create proxy
 
 if [ ! -d "jenkins" ]; then
     echo "criando diretorio jenkins"
