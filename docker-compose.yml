@@ -67,6 +67,43 @@ services:
       - "traefik.http.routers.jenkins-secure.rule=Host(`${JENKINS_URL}`)"
       - "traefik.http.routers.jenkins-secure.service=jenkins"
       - "traefik.http.services.jenkins.loadbalancer.server.port=${JENKINS_PORT}"
+  
+  double-check-api:
+    container_name: double-check-api
+    image: unity.servehttp.com:5000/double-check-api:master
+    security_opt:
+      - no-new-privileges:true
+    env_file: ./.env.test
+    depends_on:
+      - double-check-api-database
+    environment:
+      - ENVIRONMENT=TEST
+    command: bash -c 'while !</dev/tcp/double-check-api-database/3306; do sleep 1; done; npm start'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.double-check-api-secure.entrypoints=websecure"
+      - "traefik.http.routers.double-check-api-secure.rule=Host(`api.double-check.tech`)"
+      - "traefik.http.routers.double-check-api-secure.service=double-check-api"
+      - "traefik.http.services.double-check-api.loadbalancer.server.port=3333"
+    networks:
+      - proxy
+  
+  double-check-api-database:
+    container_name: double-check-api-database
+    image: unity.servehttp.com:5000/double-check-api-database:master
+    ports:
+      - 3317:3306
+    expose:
+      - "3306"
+    environment:
+      MYSQL_USER: devVivoApiDb
+      MYSQL_PASSWORD: passDevVivoApiDb
+      MYSQL_DATABASE: double-check-api
+      MYSQL_ROOT_PASSWORD: "#DevVivo12345Ef"
+    command: --innodb_use_native_aio=0 --socket=/tmp/mysql.sock --bind_address=0.0.0.0
+    networks:
+      - proxy
 
 
 networks:
