@@ -6,7 +6,7 @@
 
 # gerar certificados
 
-docker run -it -p 80:80 -v "/docker/volumes/certbot/etc/letsencrypt:/etc/letsencrypt" certbot/dns-digitalocean certonly --standalone
+docker run -it -p 80:80 -v "$CONFIG_PROD_HOME/certbot/etc/letsencrypt:/etc/letsencrypt" certbot/dns-digitalocean certonly --standalone
 
 gitlab.doublecheck-app.tech
 
