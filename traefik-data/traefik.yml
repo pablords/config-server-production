@@ -27,8 +27,12 @@ providers:
 certificatesResolvers:
   letsencrypt:
     acme:
-      email: pablords@gmail.com
+      email: app@doublecheck-app.tech
       storage: acme.json
       keyType: EC384
       httpChallenge:
         entryPoint: web
+
+acme:
+  onHostRule: false
+
